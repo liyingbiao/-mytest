@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--1. 开启注解扫描,扫描controller包-->
+    <context:component-scan base-package="com.itheima.controller,com.itheima.utils"/>
+
+    <!--2. 配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--3. 开启注解驱动。自动创建处理器映射器（解析url找到控制器类），处理器适配器（执行控制器方法，返回结果）-->
+    <mvc:annotation-driven conversion-service="conversionServiceFactory"/>
+
+    <!--4. 放行静态资源的访问-->
+    <mvc:default-servlet-handler/>
+
+    <!--5. 配置类型转换器的工厂-->
+    <bean id="conversionServiceFactory" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <!--创建自定义类型转换器类。-->
+                <bean class="com.itheima.utils.StringToTimestampConverter"/>
+            </set>
+        </property>
+    </bean>
+
+    <!--在springMVC配置文件中，开启Aop自动代理-->
+    <!--proxy-target-class="true" 表示使用cglib代理（支持目标对象实现接口或不实现接口，都可以产生代理对象。）-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
